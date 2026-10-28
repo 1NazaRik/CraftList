@@ -1,0 +1,22 @@
+{
+	"schemaVersion": 1,
+	"id": "craftlist",
+	"version": "${version}",
+	"name": "CraftList",
+	"description": "Закрепляй рецепты и смотри, сколько материалов уже собрано.",
+	"authors": [
+		"1NazaRik"
+	],
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.nazarik.craftlist.CraftListClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
