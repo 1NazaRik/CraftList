@@ -168,26 +168,31 @@ public final class CraftListClient implements ClientModInitializer {
 		List<PlanTask> visible = TASKS.stream().filter(task -> !output(task).isEmpty()).limit(4).toList();
 		if (visible.isEmpty()) return;
 
-		int x = graphics.guiWidth() - 172;
+		int x = graphics.guiWidth() - 218;
 		int y = 10;
-		int lineCount = 1;
-		for (PlanTask task : visible) lineCount += 2 + Math.min(3, materialNeeds(task, client).size());
-		graphics.fill(x - 5, y - 5, graphics.guiWidth() - 5, y + lineCount * 10 + 3, 0x990B1110);
+		int panelHeight = 22;
+		for (PlanTask task : visible) {
+			int needs = materialNeeds(task, client).size();
+			panelHeight += 18 + Math.min(3, needs) * 15 + (needs > 3 ? 15 : 0);
+		}
+		graphics.fill(x - 5, y - 5, graphics.guiWidth() - 5, y + panelHeight, 0x990B1110);
 		graphics.text(client.font, "CraftList", x, y, 0xFFE7E8D8);
-		y += 12;
+		y += 14;
 		for (PlanTask task : visible) {
 			ItemStack output = output(task);
-			graphics.text(client.font, output.getHoverName().getString() + " × " + task.amount, x, y, 0xFFFFFFFF);
-			y += 10;
+			graphics.item(output, x, y - 4);
+			graphics.text(client.font, output.getHoverName().getString() + " × " + task.amount, x + 20, y, 0xFFFFFFFF);
+			y += 18;
 			List<MaterialNeed> needs = materialNeeds(task, client);
 			for (MaterialNeed need : needs.stream().limit(3).toList()) {
 				String line = new ItemStack(need.item).getHoverName().getString() + " " + Math.min(need.have, need.required) + "/" + need.required;
-				graphics.text(client.font, line, x + 7, y, need.have >= need.required ? 0xFF9CD49D : 0xFFE7C77B);
-				y += 10;
+				graphics.item(new ItemStack(need.item), x + 7, y - 4);
+				graphics.text(client.font, line, x + 27, y, need.have >= need.required ? 0xFF9CD49D : 0xFFE7C77B);
+				y += 15;
 			}
 			if (needs.size() > 3) {
-				graphics.text(client.font, "… ещё " + (needs.size() - 3), x + 7, y, 0xFFB7B9AA);
-				y += 10;
+				graphics.text(client.font, "… ещё " + (needs.size() - 3), x + 27, y, 0xFFB7B9AA);
+				y += 15;
 			}
 		}
 	}
